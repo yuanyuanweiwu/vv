@@ -4,10 +4,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Button disabled>nike</Button>
+        <Button size='sm' disabled >nike</Button>
         <Button className='disabled'>adidas</Button>
-        <Button type={ButtonType.Default} size={ButtonSize.Large}>click</Button>
-        <Button type={ButtonType.Link} href='www.baidu.com' >www.baidu.com</Button>
+        <Button btnType='primary' size='lg' onClick={e=>{e.preventDefault();alert('123')}}>click  Large</Button>
+        <Button btnType='link' href='www.baidu.com' >www.baidu.com</Button>
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
