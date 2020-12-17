@@ -1,13 +1,21 @@
 import React from "react";
-import Button, { ButtonType, ButtonSize } from "./components/Button/button";
+import Button from "./components/Button/button";
+import Menu from'./components/Menu/menu';
+import MenuItem from './components/Menu/menuItem'
+import SubMenu from './components/Menu/subMenu'
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Button size='sm' disabled >nike</Button>
-        <Button className='disabled'>adidas</Button>
-        <Button btnType='primary' size='lg' onClick={e=>{e.preventDefault();alert('123')}}>click  Large</Button>
-        <Button btnType='link' href='www.baidu.com' >www.baidu.com</Button>
+        <Menu defaultIndex={0} onSelect={index=>console.log(index)} mode='vertical'>
+          <MenuItem  disabled>1</MenuItem>
+          <MenuItem >2</MenuItem>
+          <SubMenu title='dropdown'>
+              <MenuItem>dropdown 1</MenuItem>
+              <MenuItem>dropdown 2</MenuItem>
+          </SubMenu>
+        </Menu>
+        
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
