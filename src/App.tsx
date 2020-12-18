@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Menu defaultIndex={0} onSelect={index=>console.log(index)} mode='vertical'>
+        <Menu defaultIndex={'0'} onSelect={index=>console.log(index)} mode='vertical' defaultOpenSubMenus={['2']}>
           <MenuItem  disabled>1</MenuItem>
           <MenuItem >2</MenuItem>
           <SubMenu title='dropdown'>
