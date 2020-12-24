@@ -7,7 +7,7 @@ import Icon from "./components/Icon/icon";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import Transition from "./components/Transition/transition";
-import Input from "./components/Input/Input";
+import Input from "./components/Input/input";
 
 library.add(fas);
 function App() {
@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Icon icon="arrow-down" size="2x" theme="primary" />
+        <Icon icon="spinner" size="2x" theme="primary"  spin/>
         <Menu
           defaultIndex={"0"}
           onSelect={(index) => console.log(index)}
