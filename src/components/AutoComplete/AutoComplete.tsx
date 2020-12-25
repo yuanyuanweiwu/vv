@@ -5,11 +5,15 @@ import React, {
   KeyboardEvent,
   useEffect,
   useState,
+  useRef,
 } from "react";
 import Input, { InputProps } from "../Input/input";
 import Icon from "../Icon/icon";
 import useDebounce from "./../../hooks/useDebounce";
 import classNames from "classnames";
+import useClickOutside from './../../hooks/useClickOutside';
+import Transition from "../Transition/transition";
+import { loadavg } from "os";
 interface DataSourceObject {
   value: string;
 }
@@ -40,9 +44,12 @@ const AutoComple: FC<AutoCompleteProps> = (props) => {
   const [Loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [highlightIndex, setHighLightIndex] = useState(-1);
+  const triggerSearch=useRef(false)
   const debounceValue = useDebounce(inputValue, 500);
+  const componentRef = useRef<HTMLDivElement>(null)
+  useClickOutside(componentRef,()=>{setSuggestions([])})
   useEffect(() => {
-    if (inputValue) {
+    if (inputValue &&triggerSearch.current) {
       //判断是否是异步查询
       const result = fetchSuggestions(debounceValue);
       // console.log(result)
@@ -51,14 +58,19 @@ const AutoComple: FC<AutoCompleteProps> = (props) => {
         result.then((data) => {
           setSuggestions(data);
           setLoading(false);
+          if (data.length>0) {
+            setShowDropdown(true)
+          }
         });
       } else {
         //同步只需要修改state
         setSuggestions(result);
+        setShowDropdown(true)
       }
     } else {
       //如果输入值为空清空列表
       setSuggestions([]);
+      setShowDropdown(false)
     }
     //消除键盘上下键更改的index
     setHighLightIndex(-1)
@@ -97,6 +109,16 @@ const AutoComple: FC<AutoCompleteProps> = (props) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setInputValue(value);
+    triggerSearch.current=true
+  };
+   //从列表中选中项
+   const handleSelect = (item: DataSourceType) => {
+    setInputValue(item.value);
+    setSuggestions([]);
+    if (onSelect) {
+      onSelect(item);
+    }
+    triggerSearch.current=false
   };
   //用于判断是否是自定义渲染
   const renderTemplate = (item: DataSourceType) => {
@@ -104,6 +126,12 @@ const AutoComple: FC<AutoCompleteProps> = (props) => {
   };
   const generateDropdown = () => {
     return (
+      <Transition
+      in={showDropdown || Loading}
+      animation="zoom-in-top"
+      timeout={300}
+      onExited={() => {setSuggestions([])}}
+    >
       <ul className="viking-suggestion-list">
       { Loading &&
         <div className="suggstions-loading-icon">
@@ -121,19 +149,13 @@ const AutoComple: FC<AutoCompleteProps> = (props) => {
         )
       })}
     </ul>
+    </Transition>
     )
   }
-  //从列表中选中项
-  const handleSelect = (item: DataSourceType) => {
-    setInputValue(item.value);
-    setSuggestions([]);
-    if (onSelect) {
-      onSelect(item);
-    }
-  };
+ 
 
   return (
-    <div className="viking-auto-complete">
+    <div className="viking-auto-complete" ref={componentRef}>
       <Input
         value={inputValue}
         onChange={handleChange}

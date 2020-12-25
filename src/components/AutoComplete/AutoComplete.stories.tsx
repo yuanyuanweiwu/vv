@@ -61,15 +61,18 @@ const SimpleComplete = () => {
     .then(res=>res.json())
     .then(({items})=>{
       // console.log(items)
-      return items.slice(0, 10).map((item: any) => ({ value: item.login, ...item}))
+      return items.slice(0, 2).map((item: any) => ({ value: item.login, ...item}))
     })
   }
   return (
-    <AutoComplete
+    <div>
+      <h1>222222</h1>
+      <AutoComplete
       fetchSuggestions={handleFetch}
       onSelect={action("selected")}
       renderOption={renderOption}
     />
+    </div>
   );
 };
 storiesOf("autocomplete component", module).add("autocomplete", SimpleComplete);
